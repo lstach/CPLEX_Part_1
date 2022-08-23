@@ -1,5 +1,7 @@
 
 from docplex.mp.model import Model
+import docplex
+
 
 # Step 2: Set up the prescriptive model #
 
