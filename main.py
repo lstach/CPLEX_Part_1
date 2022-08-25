@@ -44,7 +44,39 @@ print(assemblyConstraint)
 print("\n")
 s = m.solve()
 m.print_solution()
+print("\n")
+
+'''
+This section deals with infeasability in LP:
+'''
+infeasibleModel = m.copy()
+
+infeasibleDesk = infeasibleModel.get_var_by_name('desk')
+
+infeasibleModel.add_constraint(infeasibleDesk >= 1100)
+
+infeasibleSolution = infeasibleModel.solve()
+
+if infeasibleSolution is None:
+    print("The model is infeasible.\n")
+
+# implement soft constraint model
 
 
+
+
+# changed the RHS of the assembly constraint from 400 to 440 (accounting for overtime)
+# really, the overtime variable doesn't need to be defined here.  It just represents the overtime for assembly found in the documentation when
+# relaxing the constraints
+
+#this chunk isn't really working, and I'm not sure why.  The tutorial uses the original model to relax the constraints, which doesn't
+# really solve the infeasibility problem, because it doesn't relax the constraints of the infeasible model.  I'm curious what relaxing of constraints I can add
+# to the provided infeasible model to make it feasible.
+
+overtime = m.continuous_var(name='overtime', ub=40)
+assemblyConstraint.rhs = 400 + overtime
+m.maximize(12*desk + 20 * cell - 2 * overtime)
+solution2 = m.solve()
+m.print_solution()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
